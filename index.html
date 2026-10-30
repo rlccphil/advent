@@ -47,6 +47,9 @@ button{cursor:pointer}button:disabled{opacity:.4}
 .btn{display:inline-block;background:#365233;color:#fff;text-decoration:none;font:600 .95rem system-ui,sans-serif;padding:12px 22px;border-radius:999px;border:1px solid #365233}
 .btn:hover{background:#2b4229}
 @media(prefers-color-scheme:dark){.btn{background:#4b6e47;border-color:#4b6e47}.btn:hover{background:#5a8355}}
+.grp{margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
+.grp summary{cursor:pointer;font:600 .8rem/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.grp ol{margin:10px 0 0;padding-left:22px}.grp li{margin-bottom:8px}
 .dots{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:16px}
 .dots button{padding:8px 0;font-size:.8rem}
 .dots .cur{background:var(--navy);color:var(--bg);border-color:var(--navy)}
@@ -78,6 +81,7 @@ button{cursor:pointer}button:disabled{opacity:.4}
 </div>
 <script src="config.js"></script>
 <script src="days.js"></script>
+<script src="groups.js"></script>
 <script>
 const API="https://script.google.com/macros/s/AKfycby3AHCMbDHXS_r0waMPX7-8OwI6z5dq4bObK_X41cda0ocxT4-bElsm_3VsrBL2FE5hdQ/exec";
 const W=[["Hope","The Promise"],["Peace","Prepare the Way"],["Joy","Good News"],["Love","God with Us"]];
@@ -107,6 +111,7 @@ function render(){
   h+='<h3>Prayer</h3><p class="pr">'+esc(d.p)+'</p>';
   h+='<h3>Today\'s Practice</h3><p>'+esc(d.a)+'</p>';
  }else h+='<div class="note">The reflection for this day is on its way. In the meantime, read the passage slowly and ask: What does this tell me about who Jesus is and why he came?</div>';
+ if(typeof GROUP!=="undefined"&&GROUP[i])h+='<details class="grp"><summary>Small group discussion</summary><ol>'+GROUP[i].map(q=>'<li>'+esc(q)+'</li>').join("")+'</ol></details>';
  $("card").innerHTML=h;
  $("prev").disabled=i===0;$("next").disabled=i===DAYS.length-1;
  $("dots").innerHTML=DAYS.map((_,k)=>'<button data-k="'+k+'"'+(k===i?' class="cur"':'')+' aria-label="Day '+(k+1)+'">'+(k+1)+'</button>').join("");
