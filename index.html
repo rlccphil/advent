@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Advent 2026 · Preparing Our Hearts</title>
+<style>
+:root{--bg:#faf6ee;--card:#fff;--ink:#2b2a33;--mute:#6d6a75;--gold:#b8872e;--navy:#24305e;--line:#e8e0cf}
+@media(prefers-color-scheme:dark){:root{--bg:#14172a;--card:#1d2140;--ink:#ece8dc;--mute:#a7a4b5;--gold:#e0b04f;--navy:#c9d1ff;--line:#2d3358}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 Georgia,"Times New Roman",serif}
+.wrap{max-width:680px;margin:0 auto;padding:20px 16px 48px}
+header{text-align:center;padding:8px 0}
+h1{margin:0;font-size:1.65rem;color:var(--navy)}
+.sub{color:var(--mute);font-size:.95rem}
+.candles{display:flex;justify-content:center;gap:16px;margin:18px 0 8px;padding-top:12px}
+.c{width:10px;height:34px;background:var(--line);border-radius:2px;position:relative}
+.c.on{background:var(--gold)}
+.c.on:before{content:"";position:absolute;left:1px;top:-12px;width:8px;height:11px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:#f5c04a;box-shadow:0 0 10px #f5c04a}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:14px}
+.wk{color:var(--gold);font:600 .8rem/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.date{color:var(--mute);font-size:.92rem;margin-top:2px}
+h2{margin:6px 0 10px;font-size:1.4rem;color:var(--navy)}
+h3{margin:22px 0 6px;font:600 .8rem/1.2 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.scr{background:var(--bg);border-left:3px solid var(--gold);border-radius:6px;padding:12px 14px;margin:10px 0}
+.scr b{display:block;color:var(--navy);margin-bottom:4px}
+.txt{white-space:pre-line}
+.cp{display:block;color:var(--mute);font-size:.75rem;line-height:1.4;margin-top:8px}
+.pr{font-style:italic}
+.note{background:var(--bg);border:1px dashed var(--gold);border-radius:8px;padding:10px 12px;color:var(--mute);font-size:.92rem;margin-top:12px}
+.bar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:14px;font-family:system-ui,sans-serif}
+button,select{font:600 .9rem system-ui,sans-serif;padding:9px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+button{cursor:pointer}button:disabled{opacity:.4}
+.dots{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:16px}
+.dots button{padding:8px 0;font-size:.8rem}
+.dots .cur{background:var(--navy);color:var(--bg);border-color:var(--navy)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <h1>Advent 2026</h1>
+  <div class="sub">28 days to prepare our hearts for the coming of Christ</div>
+  <div class="candles" id="candles"></div>
+ </header>
+ <div id="pre" class="note" hidden>Advent begins on Sunday, November 29. You are welcome to look ahead!</div>
+ <div class="card" id="card"></div>
+ <div class="bar">
+  <button id="prev">← Previous</button>
+  <button id="today">Today</button>
+  <button id="next">Next →</button>
+ </div>
+ <div class="bar"><label for="tr" class="sub">Bible translation</label>
+  <select id="tr"><option value="NIV">NIV</option><option value="NASB">NASB</option><option value="MSG">The Message</option></select>
+ </div>
+ <div class="dots" id="dots"></div>
+</div>
+<script src="days.js"></script>
+<script>
+const API="https://script.google.com/macros/s/AKfycby3AHCMbDHXS_r0waMPX7-8OwI6z5dq4bObK_X41cda0ocxT4-bElsm_3VsrBL2FE5hdQ/exec";
+const W=[["Hope","The Promise"],["Peace","Prepare the Way"],["Joy","Good News"],["Love","God with Us"]];
+const START=new Date(2026,10,29);
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let tr="NIV";try{tr=localStorage.getItem("advTr")||"NIV"}catch(e){}
+$("tr").value=tr;
+const n=new Date(),t0=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+const todayI=Math.min(27,Math.max(0,Math.round((t0-START)/864e5)));
+let i=todayI,tok=0;const cache={};
+const dateOf=k=>new Date(2026,10,29+k).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
+
+function render(){
+ const d=DAYS[i],w=d.w-1;
+ $("pre").hidden=!(t0<START);
+ $("candles").innerHTML=[1,2,3,4].map(k=>'<div class="c'+(k<=d.w?" on":"")+'"></div>').join("");
+ let h='<div class="wk">Week '+d.w+' · '+W[w][0]+': '+W[w][1]+'</div><div class="date">Day '+(i+1)+' of 28 · '+dateOf(i)+'</div><h2>'+esc(d.t)+'</h2>';
+ h+='<h3>Scripture</h3><div id="scr"></div>';
+ if(d.b){
+  h+='<h3>Reflection</h3>'+d.b.map(p=>'<p>'+esc(p)+'</p>').join('');
+  h+='<h3>Pause and Ponder</h3><p>'+esc(d.q)+'</p>';
+  h+='<h3>Prayer</h3><p class="pr">'+esc(d.p)+'</p>';
+  h+='<h3>Today\'s Practice</h3><p>'+esc(d.a)+'</p>';
+ }else h+='<div class="note">The reflection for this day is on its way. In the meantime, read the passage slowly and ask: What does this tell me about who Jesus is and why he came?</div>';
+ $("card").innerHTML=h;
+ $("prev").disabled=i===0;$("next").disabled=i===27;
+ $("dots").innerHTML=DAYS.map((_,k)=>'<button data-k="'+k+'"'+(k===i?' class="cur"':'')+' aria-label="Day '+(k+1)+'">'+(k+1)+'</button>').join("");
+ load();scrollTo(0,0);
+}
+
+async function get(id){
+ const k=tr+id;if(cache[k])return cache[k];
+ const r=await fetch(API+"?bible="+encodeURIComponent(tr)+"&ref="+encodeURIComponent(id));
+ const j=await r.json();if(j.ok)cache[k]=j;return j;
+}
+function fums(d){
+ if(!d.fumsId)return;
+ const go=()=>{try{window._BAPI&&_BAPI.t(d.fumsId)}catch(e){}};
+ if(window._BAPI&&_BAPI.t)return go();
+ if(d.fumsJsInclude){const s=document.createElement("script");s.src=d.fumsJsInclude.indexOf("//")===0?"https:"+d.fumsJsInclude:d.fumsJsInclude;s.onload=go;document.head.appendChild(s)}
+}
+async function load(){
+ const my=++tok,d=DAYS[i],box=$("scr");
+ for(const id of d.r){
+  const el=document.createElement("div");el.className="scr";el.textContent="Loading…";box.appendChild(el);
+  try{
+   const j=await get(id);if(my!==tok)return;
+   if(!j.ok)throw 0;
+   el.innerHTML='<b>'+esc(j.reference)+' ('+esc($("tr").selectedOptions[0].text)+')</b><div class="txt"></div><span class="cp"></span>';
+   el.querySelector(".txt").textContent=(j.text||"").trim();
+   el.querySelector(".cp").textContent=j.copyright||"";
+   fums(j);
+  }catch(e){if(my!==tok)return;el.innerHTML='<b>'+esc(d.ref)+'</b>We couldn\'t load the passage right now. Please read it in your own Bible.'}
+ }
+}
+$("prev").onclick=()=>{if(i>0){i--;render()}};
+$("next").onclick=()=>{if(i<27){i++;render()}};
+$("today").onclick=()=>{i=todayI;render()};
+$("dots").onclick=e=>{const k=e.target.dataset&&e.target.dataset.k;if(k!=null){i=+k;render()}};
+$("tr").onchange=e=>{tr=e.target.value;try{localStorage.setItem("advTr",tr)}catch(x){}load()};
+render();
+</script>
+</body>
+</html>
