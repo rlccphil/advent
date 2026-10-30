@@ -1,6 +1,16 @@
-// 28 days: Nov 29 - Dec 26, 2026. w=week, t=title, ref=display, r=API.Bible passage IDs.
+// 30 days: Nov 26 - Dec 25 (dates come from config.js). w=week (0 = Getting Ready), t=title, ref=display, r=API.Bible passage IDs.
 // Optional per day: b=reflection (array of paragraphs), q=question, p=prayer, a=practice.
 const DAYS=[
+{w:0,t:"Wake Up, Salvation Is Near",ref:"Romans 13:11–14",r:["ROM.13.11-ROM.13.14"],
+ b:["Paul tells believers that it is time to wake up from sleep, because salvation is nearer than when we first believed. Advent is a gentle wake-up call, not to anxiety, but to attentiveness. In a season crowded with schedules, shopping, and gatherings, it is easy to drift through December half asleep to what matters most.","Paul's answer is not to try harder. It is to clothe ourselves with the Lord Jesus Christ himself. As these thirty days begin, you are not preparing by your own strength. You are being invited to put on Christ."],
+ q:"What is most likely to keep you spiritually drowsy this season?",
+ p:"Lord Jesus, wake my heart. Help me to slow down, pay attention, and put on Christ each day as I prepare for Christmas. Amen.",
+ a:"Choose a regular time and place for these thirty days, and set a daily reminder on your phone."},
+{w:0,t:"Open the Gates for the King",ref:"Psalm 24",r:["PSA.24.1-PSA.24.10"],
+ b:["Psalm 24 asks who may stand in the Lord's holy place, and the answer is the one with clean hands and a pure heart. That is a standard none of us meets on our own. Then the psalm turns, calling the gates to lift up their heads, because the King of glory is coming in.","Advent holds both truths together: our need, and the King who comes to meet it. Jesus alone has clean hands and a pure heart, and because of him we are welcomed in. So we open the doors of our hearts, the way we would ready a home for an honored guest."],
+ q:"What in your heart needs to be opened up or swept out to welcome the King?",
+ p:"King of glory, I open my heart to you. Forgive what I have held back, and come in. Thank you that in Christ I am welcome in your presence. Amen.",
+ a:"Spend a few quiet minutes confessing honestly to God, and receive his forgiveness in Christ (1 John 1:9)."},
 {w:1,t:"The First Promise",ref:"Genesis 3:8–15",r:["GEN.3.8-GEN.3.15"],
  b:["Adam and Eve hid in shame, yet God came looking for them. Before he spoke a word of consequence, he spoke a promise: a child of the woman would one day crush the serpent. Advent begins not with our search for God, but with God's search for us.","Every Christmas story flows from this first whisper of rescue. As the season opens, you don't have to tidy yourself up first. Come out from hiding and let the promise meet you right where you are."],
  q:"Where are you tempted to hide from God right now?",
@@ -54,7 +64,7 @@ const DAYS=[
 {w:4,t:"He Humbled Himself",ref:"Philippians 2:5–11",r:["PHP.2.5-PHP.2.11"]},
 {w:4,t:"Adopted as Sons and Daughters",ref:"Galatians 4:4–7",r:["GAL.4.4-GAL.4.7"]},
 {w:4,t:"Love Came Down",ref:"1 John 4:9–14",r:["1JN.4.9-1JN.4.14"]},
+{w:4,t:"Grace Has Appeared, and He Is Coming Again",ref:"Titus 2:11–14; Revelation 22:20",r:["TIT.2.11-TIT.2.14","REV.22.20-REV.22.20"]},
 {w:4,t:"Christmas Eve: Born in Bethlehem",ref:"Luke 2:1–7",r:["LUK.2.1-LUK.2.7"]},
-{w:4,t:"Christmas Day: Good News of Great Joy",ref:"Luke 2:8–20",r:["LUK.2.8-LUK.2.20"]},
-{w:4,t:"Grace Has Appeared, and He Is Coming Again",ref:"Titus 2:11–14; Revelation 22:20",r:["TIT.2.11-TIT.2.14","REV.22.20-REV.22.20"]}
+{w:4,t:"Christmas Day: Good News of Great Joy",ref:"Luke 2:8–20",r:["LUK.2.8-LUK.2.20"]}
 ];
